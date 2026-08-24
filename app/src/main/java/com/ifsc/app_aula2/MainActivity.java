@@ -1,6 +1,7 @@
 package com.ifsc.app_aula2;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -8,50 +9,61 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        Button b = findViewById(R.id.button);
-        TextView tv = findViewById(R.id.tv);
-        EditText edmin,edmax;
-        edmin = findViewById(R.id.edMin);
-        edmax = findViewById(R.id.edMax);
-
-        tv.setText("Número Aleatório");
-
-        b.setOnClickListener(view -> {
-            String smin = edmin.getText().toString();
-            String smax = edmax.getText().toString();
-
-            if(smin.isEmpty()){
-                edmin.setError("Informe um Número Inteiro!");
-                return;
-            }
-
-            if(smax.isEmpty()){
-                edmax.setError("Informe um Número Inteiro!");
-                return;
-            }
-
-            int min = Integer.parseInt(edmin.getText().toString());
-            int max = Integer.parseInt(edmax.getText().toString());
-
-            if(min>max){
-                Toast.makeText(this, "O valor Minimo não pode ser maior do que o valor Maximo!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            Random random = new Random();
-            int randomN = random.nextInt(min,max);
-            tv.setText(Integer.toString(randomN));
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
         });
+        Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
+        Log.d("cicloDaVida", "onCreate");
+    }
+    @Override
+    protected void onStart(){
+        super.onStart();
+        Toast.makeText(this, "onStart", Toast.LENGTH_LONG).show();
+        Log.d("cicloDaVida", "onStart");
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
+        Log.d("cicloDaVida", "onResume");
+    }
+    @Override
+    protected void onPause(){
+        super.onPause();
+        Toast.makeText(this, "onPause", Toast.LENGTH_LONG).show();
+        Log.d("cicloDaVida", "onPause");
+    }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        Toast.makeText(this, "onStop", Toast.LENGTH_LONG).show();
+        Log.d("cicloDaVida", "onStop");
+    }
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        Toast.makeText(this, "onRestart", Toast.LENGTH_LONG).show();
+        Log.d("cicloDaVida", "onRestart");
+    }
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        Toast.makeText(this, "onDestroy", Toast.LENGTH_LONG).show();
+        Log.d("cicloDaVida", "onDestroy");
     }
 }
