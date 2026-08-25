@@ -1,5 +1,6 @@
 package com.ifsc.app_aula2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -29,6 +30,12 @@ public class MainActivity extends AppCompatActivity {
         });
         Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
         Log.d("cicloDaVida", "onCreate");
+
+        Button b = findViewById(R.id.button);
+        b.setOnClickListener(view -> {
+            Intent i = new Intent(this, ActivityB.class);
+            startActivity(i);
+        });
     }
     @Override
     protected void onStart(){
