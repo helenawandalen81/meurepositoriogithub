@@ -1,53 +1,50 @@
 package com.ifsc.app_aula2;
 
 
-import android.content.DialogInterface;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.skydoves.colorpickerview.ColorEnvelope;
-import com.skydoves.colorpickerview.ColorPickerDialog;
-import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
-
-public class MainActivity extends AppCompatActivity {
-    Button colorButton;
-    SimplePaint simplepaint;
+public class MainActivity extends AppCompatActivity implements SensorEventListener{
+    int contador = 0;
+    TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        colorButton = findViewById(R.id.btnColor);
-        simplepaint = findViewById(R.id.simplePaint);
-        colorButton.setOnClickListener(view -> {
-            new ColorPickerDialog.Builder(this)
-                    .setTitle("ColorPicker Dialog")
-                    .setPreferenceName("MyColorPickerDialog")
-                    .setPositiveButton("confirma",
-                            new ColorEnvelopeListener() {
-                                @Override
-                                public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
-                                    setLayoutColor(envelope);
-                                }
-                            })
-                    .setNegativeButton("cancel",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.dismiss();
-                                }
-                            })
-                    .attachAlphaSlideBar(true) // the default value is true.
-                    .attachBrightnessSlideBar(true)  // the default value is true.
-                    .setBottomSpace(12) // set a bottom space between the last slidebar and buttons.
-                    .show();
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.edText), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
         });
+        SensorManager sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Sensor ac = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        sm.registerListener(this,ac,SensorManager.SENSOR_DELAY_NORMAL);
+        tv = findViewById(R.id.textView);
     }
-    public void setLayoutColor(ColorEnvelope envelope){
-    simplepaint.setColor(envelope.getColor());
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+         tv.setText(Float.toString(event.values[0])+" : "+
+                    Float.toString(event.values[1])+" : "+
+                    Float.toString(event.values[2]));
     }
 }
